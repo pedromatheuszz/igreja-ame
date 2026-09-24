@@ -13,12 +13,12 @@ Site 100% estático (HTML, CSS e JS próprios): sem backend, sem banco de dados,
 | HSTS, `nosniff`, COOP, CORP, `Referrer-Policy` | cabeçalho HTTP | Downgrade para HTTP, MIME sniffing, ataques entre janelas, vazamento de URL |
 | `rel="noopener noreferrer"` em links externos | `index.html` | Reverse tabnabbing e vazamento de referer |
 | Fontes hospedadas no próprio site | `assets/fonts/` | Dependência de terceiros e envio do IP do visitante ao Google (LGPD) |
-| Mapa do Google em iframe com `sandbox`, `referrerpolicy` e carregamento preguiçoso (`loading="lazy"`) | `index.html` | Navegação forçada da página e vazamento de URL pelo mapa |
+| Mapa do Google em iframe com `sandbox` e `referrerpolicy`, carregado só depois que a página abre | `index.html` + `script.js` | Navegação forçada da página e vazamento de URL pelo mapa |
 | Bloqueio de arquivos ocultos, listagem de pastas e métodos de escrita | `.htaccess` | Vazamento de `.git`/`.env`, enumeração de arquivos |
 
 ## Privacidade (LGPD)
 
-O mapa do Google Maps carrega sozinho quando o visitante chega perto da seção "Planeje sua visita", sem pedir consentimento antes. A partir desse momento, o Google recebe dados de navegação do visitante (IP e cookies dele). Vale citar o Google Maps na política de privacidade do site.
+O mapa do Google Maps carrega sozinho, em segundo plano, logo depois que a página termina de abrir, sem pedir consentimento antes. A partir desse momento, o Google recebe dados de navegação do visitante (IP e cookies dele). Vale citar o Google Maps na política de privacidade do site.
 
 ## Hospedagem
 

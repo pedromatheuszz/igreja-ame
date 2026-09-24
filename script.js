@@ -164,6 +164,14 @@
   updateNext();
   setInterval(updateNext, 60 * 1000);
 
+  /* ---------- Mapa: começa a baixar em segundo plano assim que a página termina de abrir ---------- */
+  // No HTML ele é lazy para não disputar a conexão com o carregamento inicial. Depois disso já
+  // carrega, para estar pronto quando o visitante chegar na seção (inclusive pulando pelo menu).
+  const mapFrame = document.querySelector('#mapa iframe');
+  const loadMap = () => { if (mapFrame) mapFrame.loading = 'eager'; };
+  if (document.readyState === 'complete') setTimeout(loadMap, 600);
+  else window.addEventListener('load', () => setTimeout(loadMap, 600), { once: true });
+
   /* ---------- Ano no rodapé ---------- */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
