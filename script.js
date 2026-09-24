@@ -54,6 +54,25 @@
   window.matchMedia('(min-width: 901px)').addEventListener?.('change', (e) => { if (e.matches) setMenu(false); });
 
   /* ---------- Animações de entrada ---------- */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Números que contam do zero até o valor final (o HTML já traz o valor final, sem JS continua certo)
+  const countUp = (el, delay) => {
+    const end = Number(el.dataset.count);
+    if (!end || reduceMotion) return;
+    el.style.minWidth = `${el.offsetWidth}px`; // reserva a largura final: nada ao lado pula
+    el.textContent = '0';
+    setTimeout(() => {
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / 1600, 1);
+        el.textContent = String(Math.round(end * (1 - (1 - p) ** 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, delay);
+  };
+
   const reveals = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
@@ -61,14 +80,27 @@
         if (!entry.isIntersecting) return;
         const el = entry.target;
         const siblings = [...el.parentElement.children].filter((c) => c.classList.contains('reveal'));
-        el.style.transitionDelay = `${Math.min(siblings.indexOf(el), 5) * 80}ms`;
+        const delay = Math.min(siblings.indexOf(el), 5) * 90;
+        el.style.animationDelay = `${delay}ms`;
         el.classList.add('is-in');
+        el.querySelectorAll('[data-count]').forEach((n) => countUp(n, delay + 200));
         io.unobserve(el);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach((el) => io.observe(el));
   } else {
     reveals.forEach((el) => el.classList.add('is-in'));
+  }
+
+  /* ---------- Brilho que segue o mouse nos cartões da comunidade (só com mouse) ---------- */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.card').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
   }
 
   /* ---------- Próximo culto (horário de Joinville) ---------- */

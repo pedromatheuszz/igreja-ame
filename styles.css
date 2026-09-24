@@ -102,10 +102,11 @@ em {
   color: var(--accent);
   margin-bottom: 18px;
 }
-.eyebrow::before { content: ""; width: 26px; height: 2px; background: currentColor; border-radius: 2px; }
+.eyebrow::before { content: ""; width: 26px; height: 2px; background: currentColor; border-radius: 2px; transform-origin: left; }
 .eyebrow--light { color: var(--gold); }
 
-.section { padding: clamp(80px, 11vw, 140px) 0; }
+/* overflow-x: clip corta o deslize lateral das animações sem criar rolagem (e sem quebrar o sticky) */
+.section { padding: clamp(80px, 11vw, 140px) 0; overflow-x: clip; }
 .section__head { max-width: 760px; margin-bottom: clamp(40px, 6vw, 64px); }
 .section__title {
   font-family: var(--sans);
@@ -136,8 +137,19 @@ em {
 @media (hover: hover) { .btn:hover { transform: translateY(-2px); } }
 .btn--lg { padding: 18px 32px; font-size: 17px; }
 .btn--sm { padding: 11px 20px; font-size: 15px; }
-.btn--accent { --bg: var(--accent); --fg: #fff; box-shadow: 0 10px 30px -10px rgba(228, 87, 46, .7); }
+.btn--accent {
+  --bg: var(--accent); --fg: #fff; box-shadow: 0 10px 30px -10px rgba(228, 87, 46, .7);
+  position: relative; overflow: hidden; isolation: isolate;
+}
 .btn--accent:hover { --bg: var(--accent-deep); }
+/* Reflexo de luz que atravessa o botão principal ao passar o mouse */
+.btn--accent::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%; z-index: -1;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent);
+  transform: translateX(0) skewX(-20deg); pointer-events: none;
+}
+@media (hover: hover) { .btn--accent:hover::after { animation: shine .8s ease-in-out; } }
+@keyframes shine { to { transform: translateX(420%) skewX(-20deg); } }
 .btn--dark { --bg: var(--ink); --fg: var(--cream); }
 .btn--dark:hover { --bg: var(--ink-2); }
 .btn--ghost { --bg: rgba(255, 248, 240, .08); --fg: var(--cream); border-color: var(--line-light); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
@@ -157,18 +169,27 @@ em {
   padding: 18px 0;
   transition: padding .35s;
 }
-/* O fundo ao rolar fica num pseudo-elemento: um backdrop-filter no próprio .nav
-   o tornaria o bloco de contenção do menu mobile (position: fixed), que ficaria
-   espremido dentro da barra. */
+/* Fundo de vidro fosco, sempre presente para a barra não se misturar com a página.
+   Fica num pseudo-elemento: um backdrop-filter no próprio .nav o tornaria o bloco de
+   contenção do menu mobile (position: fixed), que ficaria espremido dentro da barra. */
 .nav::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  background: rgba(20, 17, 15, .86);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  box-shadow: 0 1px 0 var(--line-light);
-  opacity: 0; visibility: hidden; /* invisível, o desfoque nem é calculado */
-  transition: opacity .35s, visibility .35s;
+  background: rgba(20, 17, 15, .42);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line-light);
+  transition: background .35s, box-shadow .35s;
 }
+/* Linha de progresso da leitura na base da barra (onde o navegador suporta animação por scroll) */
+.nav::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; z-index: -1;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  transform: scaleX(0); transform-origin: left;
+}
+@supports (animation-timeline: scroll()) {
+  .nav::after { animation: progress linear both; animation-timeline: scroll(root); }
+}
+@keyframes progress { to { transform: scaleX(1); } }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .nav__links { display: flex; align-items: center; gap: 30px; }
 .nav__links a:not(.btn) {
@@ -183,7 +204,11 @@ em {
 .nav__links a:not(.btn):hover::after { transform: scaleX(1); }
 
 .nav.is-scrolled { padding: 12px 0; }
-.nav.is-scrolled::before { opacity: 1; visibility: visible; }
+/* Sobre as seções claras o vidro fica mais escuro, para o texto claro continuar legível */
+.nav.is-scrolled::before {
+  background: rgba(20, 17, 15, .7);
+  box-shadow: 0 14px 34px -22px rgba(0, 0, 0, .6);
+}
 
 .nav__toggle {
   display: none;
@@ -247,6 +272,37 @@ em {
   max-width: 12ch;
 }
 .hero__title em { color: var(--accent); letter-spacing: -.03em; }
+
+/* Entrada do hero ao carregar: o título surge palavra por palavra, o sublinhado de
+   "família." se desenha e o resto aparece em sequência */
+.hero__inner > * { animation: rise .9s var(--ease) backwards; }
+.hero__inner > .eyebrow { animation-delay: .05s; }
+.hero__inner > .hero__title { animation: none; }
+.hero__inner > .hero__lead { animation-delay: .6s; }
+.hero__inner > .hero__actions { animation-delay: .75s; }
+.hero__inner > .next { animation-delay: .9s; }
+.hero .eyebrow::before { animation: grow-x .8s var(--ease) .3s backwards; }
+.hero__word { display: inline-block; animation: word-in .9s var(--ease) backwards; }
+.hero__word:nth-child(1) { animation-delay: .15s; }
+.hero__word:nth-child(2) { animation-delay: .27s; }
+.hero__word:nth-child(3) { animation-delay: .39s; }
+.hero__fam { position: relative; }
+.hero__swash {
+  position: absolute; left: 3%; bottom: -.2em; width: 96%; height: auto;
+  overflow: visible; pointer-events: none;
+  fill: none; stroke: var(--gold); stroke-width: 5; stroke-linecap: round;
+}
+.hero__swash path { stroke-dasharray: 1; animation: draw 1s var(--ease) 1s backwards; }
+@keyframes word-in { from { opacity: 0; transform: translateY(.35em); filter: blur(14px); } }
+@keyframes draw { from { stroke-dashoffset: 1; } }
+
+/* No desktop o conteúdo do hero sobe e esmaece ao rolar (onde há animação por scroll) */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 901px) and (min-height: 700px) {
+    .hero__inner { animation: hero-out linear both; animation-timeline: scroll(root); animation-range: 0 85vh; }
+  }
+}
+@keyframes hero-out { to { opacity: 0; transform: translateY(-70px); } }
 .hero__lead {
   font-size: clamp(18px, 2vw, 21px);
   max-width: 560px;
@@ -264,17 +320,21 @@ em {
   font-size: 15px;
 }
 .next__dot {
+  position: relative; flex: none;
   width: 10px; height: 10px; border-radius: 50%; background: #3DDC84;
-  box-shadow: 0 0 0 0 rgba(61, 220, 132, .6);
-  animation: pulse 2s infinite;
+}
+/* O pulso anima transform/opacity (roda na GPU), não box-shadow (que repinta a cada quadro) */
+.next__dot::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit;
+  animation: ping 2s var(--ease) infinite;
 }
 .next__label { color: rgba(255, 248, 240, .6); }
 .next__when { font-weight: 700; }
 .next__count { color: var(--gold); font-weight: 600; }
 .next__count:empty { display: none; }
-@keyframes pulse {
-  70% { box-shadow: 0 0 0 10px rgba(61, 220, 132, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(61, 220, 132, 0); }
+@keyframes ping {
+  0% { transform: scale(1); opacity: .7; }
+  70%, 100% { transform: scale(2.8); opacity: 0; }
 }
 
 .hero__marquee {
@@ -309,7 +369,9 @@ em {
 .stat__num {
   font-family: var(--serif); font-weight: 600;
   font-size: clamp(44px, 5vw, 64px); line-height: 1; letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums; /* a contagem não faz o número "tremer" */
 }
+.stat__num > [data-count] { display: inline-block; }
 .stat__num small { font-family: var(--sans); font-size: 18px; font-weight: 700; margin-left: 4px; color: var(--accent); letter-spacing: 0; }
 .stat__label { font-size: 14px; color: var(--muted); }
 .about__quote {
@@ -370,9 +432,14 @@ em {
 .first__intro { font-size: 18px; color: var(--ink-2); max-width: 460px; margin-bottom: 32px; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .step {
+  position: relative;
   display: grid; grid-template-columns: 70px 1fr; gap: 20px; align-items: start;
   padding: 28px 0;
-  border-top: 1px solid var(--line);
+}
+/* Linha divisória como pseudo-elemento, para poder "se desenhar" quando o passo aparece */
+.step::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: var(--line); transform-origin: left;
 }
 .step:last-child { border-bottom: 1px solid var(--line); }
 .step__n {
@@ -407,19 +474,29 @@ em {
   width: 380px; height: 380px; right: -120px; top: -140px;
   filter: blur(10px); opacity: .9;
   transition: transform .6s var(--ease);
+  animation: drift 14s ease-in-out infinite alternate; /* a mancha de luz flutua devagar */
+}
+/* Brilho que segue o mouse (posição vem do script.js) */
+.card::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 248, 240, .13), transparent 60%);
+  opacity: 0; transition: opacity .4s;
 }
 @media (hover: hover) {
   .card:hover { transform: translateY(-4px); }
   .card:hover::before { transform: scale(1.12); }
+  .card:hover::after { opacity: 1; }
 }
+@keyframes drift { to { translate: -40px 30px; } }
 .card--gp  { grid-column: span 4; grid-row: span 2; min-height: 460px; }
 .card--gp::before  { background: radial-gradient(circle, rgba(228, 87, 46, .75), transparent 65%); width: 620px; height: 620px; right: -160px; top: -200px; }
 .card--city { grid-column: span 2; grid-row: span 2; background: var(--accent); border-color: transparent; }
-.card--city::before { background: radial-gradient(circle, rgba(242, 165, 65, .9), transparent 65%); }
+.card--city::before { background: radial-gradient(circle, rgba(242, 165, 65, .9), transparent 65%); animation-duration: 17s; animation-direction: alternate-reverse; }
 .card--vol { grid-column: span 3; }
-.card--vol::before { background: radial-gradient(circle, rgba(242, 165, 65, .45), transparent 65%); }
+.card--vol::before { background: radial-gradient(circle, rgba(242, 165, 65, .45), transparent 65%); animation-duration: 11s; }
 .card--cel { grid-column: span 3; background: var(--cream); color: var(--ink); border-color: transparent; }
-.card--cel::before { background: radial-gradient(circle, rgba(228, 87, 46, .28), transparent 65%); }
+.card--cel::before { background: radial-gradient(circle, rgba(228, 87, 46, .28), transparent 65%); animation-duration: 19s; animation-direction: alternate-reverse; }
+.card--cel::after { background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(228, 87, 46, .1), transparent 60%); }
 
 /* A etiqueta faz parte do fluxo: fica no topo e, quando o texto é longo (celular),
    empurra o conteúdo para baixo em vez de ficar por cima do título. */
@@ -487,11 +564,18 @@ em {
   font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 44px; color: rgba(255, 248, 240, .9);
 }
 .watch__play {
+  position: relative;
   width: 84px; height: 84px; border-radius: 50%;
   display: grid; place-items: center;
   background: var(--cream);
   box-shadow: 0 0 0 12px rgba(255, 248, 240, .15);
   transition: transform .35s var(--ease);
+}
+/* Onda que se espalha do botão de play, como um convite para assistir */
+.watch__play::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid rgba(255, 248, 240, .6); opacity: 0;
+  animation: ripple 2.8s var(--ease) infinite;
 }
 .watch__play svg { width: 30px; height: 30px; fill: var(--accent); margin-left: 4px; }
 .watch__badge {
@@ -546,7 +630,8 @@ em {
     radial-gradient(60% 60% at 50% 40%, rgba(228, 87, 46, .12), transparent 70%),
     var(--sand-2);
 }
-.map-consent svg { width: 44px; height: 44px; fill: var(--accent); }
+.map-consent svg { width: 44px; height: 44px; fill: var(--accent); animation: bob 2.8s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-7px); } }
 .map-consent p { max-width: 380px; margin: 0; font-size: 15px; color: var(--ink-2); }
 .map-consent__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; }
 .map-consent .card__link { color: var(--accent); }
@@ -574,16 +659,45 @@ em {
   display: grid; place-items: center;
   background: #25D366; color: #fff;
   box-shadow: 0 14px 30px -10px rgba(37, 211, 102, .7);
-  transition: transform .25s var(--ease), opacity .3s, visibility .3s;
-  opacity: 0; visibility: hidden; transform: translateY(12px);
+  /* entra "saltando" (curva com leve exagero no fim) */
+  transition: transform .5s cubic-bezier(.34, 1.56, .64, 1), opacity .3s, visibility .3s;
+  opacity: 0; visibility: hidden; transform: translateY(16px) scale(.6);
 }
 .wa.is-visible { opacity: 1; visibility: visible; transform: none; }
 @media (hover: hover) { .wa:hover { transform: scale(1.07); } }
 .wa svg { width: 30px; height: 30px; fill: currentColor; }
+/* Onda discreta de tempos em tempos, para lembrar que dá pra chamar no WhatsApp */
+.wa::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid #25D366; opacity: 0; pointer-events: none;
+}
+.wa.is-visible::before { animation: ripple 4.5s var(--ease) 1.2s infinite; }
+@keyframes ripple {
+  0% { transform: scale(1); opacity: .8; }
+  35%, 100% { transform: scale(1.8); opacity: 0; }
+}
 
-/* ---------- Animações de entrada ---------- */
-.js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
-.js .reveal.is-in { opacity: 1; transform: none; }
+/* ---------- Animações de entrada (ao rolar) ----------
+   O script.js adiciona .is-in quando o elemento aparece na tela, com um pequeno atraso
+   em cascata. São animações (e não transições) para não atrasar os efeitos de hover. */
+.js .reveal:not(.is-in) { opacity: 0; }
+.js .reveal.is-in { animation: rise .9s var(--ease) backwards; }
+/* títulos entram em foco */
+.js .section__title.reveal.is-in { animation-name: focus-in; animation-duration: 1s; }
+/* cartões sobem crescendo */
+.js :is(.stat, .service, .card, .watch).reveal.is-in { animation-name: pop-in; animation-duration: 1s; }
+/* a linha antes do sobretítulo e as divisórias dos passos se desenham */
+.js .is-in.eyebrow::before, .js .is-in .eyebrow::before { animation: grow-x .8s var(--ease) .25s backwards; }
+.js .step.is-in::before { animation: grow-x 1.1s var(--ease) backwards; animation-delay: inherit; }
+/* no desktop, a coluna da direita desliza de lado */
+@media (min-width: 901px) {
+  .js :is(.step, .give__verse, .app, .visit__map).reveal.is-in { animation-name: from-right; animation-duration: 1s; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } }
+@keyframes focus-in { from { opacity: 0; transform: translateY(18px); filter: blur(10px); } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(40px) scale(.94); } }
+@keyframes from-right { from { opacity: 0; transform: translateX(56px); } }
+@keyframes grow-x { from { transform: scaleX(0); } }
 
 /* ---------- Responsivo ---------- */
 @media (max-width: 1024px) {
@@ -656,5 +770,5 @@ em {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .js .reveal { opacity: 1; transform: none; }
+  .js .reveal:not(.is-in) { opacity: 1; }
 }
