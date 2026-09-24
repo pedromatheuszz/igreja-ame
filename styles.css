@@ -143,13 +143,8 @@ em {
 .btn--outline-light:hover { border-color: var(--cream); }
 
 /* ---------- Logo ---------- */
-.logo { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--cream); }
-.logo__mark {
-  font-family: var(--serif); font-style: italic; font-weight: 600;
-  font-size: 34px; line-height: 1; letter-spacing: -.02em;
-}
-.logo__mark::after { content: "."; color: var(--accent); font-style: normal; }
-.logo__sub { font-size: 11px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
+.logo { display: inline-flex; align-items: center; text-decoration: none; }
+.logo img { display: block; height: 28px; width: auto; }
 
 /* ---------- NAV ---------- */
 .nav {
@@ -539,7 +534,7 @@ em {
 /* ---------- FOOTER ---------- */
 .footer { background: var(--ink); color: var(--cream); padding: 80px 0 32px; }
 .footer__top { display: flex; justify-content: space-between; gap: 48px; flex-wrap: wrap; padding-bottom: 56px; border-bottom: 1px solid var(--line-light); }
-.logo--light .logo__mark { font-size: 56px; }
+.logo--footer img { height: 44px; }
 .footer__tag { font-family: var(--serif); font-style: italic; font-size: 22px; color: rgba(255, 248, 240, .6); margin: 14px 0 0; }
 .footer__cols { display: flex; gap: clamp(40px, 7vw, 96px); flex-wrap: wrap; }
 .footer__cols div { display: flex; flex-direction: column; gap: 10px; }
