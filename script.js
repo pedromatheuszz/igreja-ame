@@ -164,21 +164,6 @@
   updateNext();
   setInterval(updateNext, 60 * 1000);
 
-  /* ---------- Mapa: só carrega o Google Maps após o clique (privacidade/LGPD) ---------- */
-  const MAP_SRC = 'https://www.google.com/maps?q=Rua+Benjamin+Constant,+3473+-+Gl%C3%B3ria,+Joinville+-+SC&output=embed';
-  const mapBox = document.getElementById('mapa');
-  document.getElementById('load-map')?.addEventListener('click', () => {
-    if (!mapBox) return;
-    const iframe = document.createElement('iframe');
-    iframe.title = 'Mapa: Igreja Ame, Joinville';
-    iframe.src = MAP_SRC;
-    iframe.loading = 'lazy';
-    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
-    iframe.allowFullscreen = true;
-    mapBox.replaceChildren(iframe);
-  });
-
   /* ---------- Ano no rodapé ---------- */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());

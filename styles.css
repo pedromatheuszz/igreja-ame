@@ -617,24 +617,16 @@ em {
 .info dd a { color: var(--accent); font-weight: 700; text-decoration: none; }
 .info dd a:hover { text-decoration: underline; }
 .visit__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+/* O pino no fundo aparece enquanto o mapa carrega (ou se algo bloquear o Google Maps) */
 .visit__map {
   border-radius: var(--radius); overflow: hidden; min-height: 440px;
-  border: 1px solid var(--line); background: var(--sand-2);
-}
-.visit__map iframe { width: 100%; height: 100%; min-height: 440px; border: 0; filter: grayscale(.25) contrast(1.02); }
-.map-consent {
-  height: 100%; min-height: 440px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
-  padding: 32px; text-align: center;
+  border: 1px solid var(--line);
   background:
-    radial-gradient(60% 60% at 50% 40%, rgba(228, 87, 46, .12), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23E4572E' d='M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E") center / 44px no-repeat,
+    radial-gradient(60% 60% at 50% 50%, rgba(228, 87, 46, .12), transparent 70%),
     var(--sand-2);
 }
-.map-consent svg { width: 44px; height: 44px; fill: var(--accent); animation: bob 2.8s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translateY(-7px); } }
-.map-consent p { max-width: 380px; margin: 0; font-size: 15px; color: var(--ink-2); }
-.map-consent__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; }
-.map-consent .card__link { color: var(--accent); }
+.visit__map iframe { width: 100%; height: 100%; min-height: 440px; border: 0; filter: grayscale(.25) contrast(1.02); }
 
 /* ---------- FOOTER ---------- */
 .footer { background: var(--ink); color: var(--cream); padding: 80px 0 32px; }
@@ -731,7 +723,7 @@ em {
   .first__grid > div:first-child { position: static; }
   .services__grid { grid-template-columns: 1fr; }
   .service__time { font-size: 88px; }
-  .visit__map, .visit__map iframe, .map-consent { min-height: 340px; }
+  .visit__map, .visit__map iframe { min-height: 340px; }
 }
 
 /* Celular deitado: menu mais compacto para caber na altura da tela */
