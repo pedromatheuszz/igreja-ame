@@ -49,7 +49,11 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+html {
+  scroll-behavior: smooth; scroll-padding-top: 84px;
+  /* impede o iOS de aumentar o texto sozinho ao girar o celular */
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
@@ -128,14 +132,15 @@ em {
   white-space: nowrap;
 }
 .btn svg { width: 18px; height: 18px; fill: currentColor; }
-.btn:hover { transform: translateY(-2px); }
+/* Efeitos de "levantar" só onde há mouse: no toque eles grudam depois do toque */
+@media (hover: hover) { .btn:hover { transform: translateY(-2px); } }
 .btn--lg { padding: 18px 32px; font-size: 17px; }
 .btn--sm { padding: 11px 20px; font-size: 15px; }
 .btn--accent { --bg: var(--accent); --fg: #fff; box-shadow: 0 10px 30px -10px rgba(228, 87, 46, .7); }
 .btn--accent:hover { --bg: var(--accent-deep); }
 .btn--dark { --bg: var(--ink); --fg: var(--cream); }
 .btn--dark:hover { --bg: var(--ink-2); }
-.btn--ghost { --bg: rgba(255, 248, 240, .08); --fg: var(--cream); border-color: var(--line-light); backdrop-filter: blur(8px); }
+.btn--ghost { --bg: rgba(255, 248, 240, .08); --fg: var(--cream); border-color: var(--line-light); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .btn--ghost:hover { --bg: rgba(255, 248, 240, .16); }
 .btn--light { --bg: var(--cream); --fg: var(--ink); }
 .btn--light:hover { --bg: #fff; }
@@ -150,7 +155,19 @@ em {
 .nav {
   position: fixed; inset: 0 0 auto; z-index: 100;
   padding: 18px 0;
-  transition: background .35s, padding .35s, box-shadow .35s;
+  transition: padding .35s;
+}
+/* O fundo ao rolar fica num pseudo-elemento: um backdrop-filter no próprio .nav
+   o tornaria o bloco de contenção do menu mobile (position: fixed), que ficaria
+   espremido dentro da barra. */
+.nav::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: rgba(20, 17, 15, .86);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  box-shadow: 0 1px 0 var(--line-light);
+  opacity: 0; visibility: hidden; /* invisível, o desfoque nem é calculado */
+  transition: opacity .35s, visibility .35s;
 }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .nav__links { display: flex; align-items: center; gap: 30px; }
@@ -165,13 +182,8 @@ em {
 .nav__links a:not(.btn):hover { color: #fff; }
 .nav__links a:not(.btn):hover::after { transform: scaleX(1); }
 
-.nav.is-scrolled {
-  padding: 12px 0;
-  background: rgba(20, 17, 15, .86);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  box-shadow: 0 1px 0 var(--line-light);
-}
+.nav.is-scrolled { padding: 12px 0; }
+.nav.is-scrolled::before { opacity: 1; visibility: visible; }
 
 .nav__toggle {
   display: none;
@@ -327,7 +339,7 @@ em {
   transition: transform .35s var(--ease), box-shadow .35s var(--ease);
   overflow: hidden;
 }
-.service:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -24px rgba(20, 17, 15, .35); }
+@media (hover: hover) { .service:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -24px rgba(20, 17, 15, .35); } }
 .service__day {
   font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
 }
@@ -390,14 +402,16 @@ em {
   isolation: isolate;
   transition: transform .35s var(--ease);
 }
-.card:hover { transform: translateY(-4px); }
 .card::before {
   content: ""; position: absolute; z-index: -1; border-radius: 50%;
   width: 380px; height: 380px; right: -120px; top: -140px;
   filter: blur(10px); opacity: .9;
   transition: transform .6s var(--ease);
 }
-.card:hover::before { transform: scale(1.12); }
+@media (hover: hover) {
+  .card:hover { transform: translateY(-4px); }
+  .card:hover::before { transform: scale(1.12); }
+}
 .card--gp  { grid-column: span 4; grid-row: span 2; min-height: 460px; }
 .card--gp::before  { background: radial-gradient(circle, rgba(228, 87, 46, .75), transparent 65%); width: 620px; height: 620px; right: -160px; top: -200px; }
 .card--city { grid-column: span 2; grid-row: span 2; background: var(--accent); border-color: transparent; }
@@ -407,8 +421,11 @@ em {
 .card--cel { grid-column: span 3; background: var(--cream); color: var(--ink); border-color: transparent; }
 .card--cel::before { background: radial-gradient(circle, rgba(228, 87, 46, .28), transparent 65%); }
 
+/* A etiqueta faz parte do fluxo: fica no topo e, quando o texto é longo (celular),
+   empurra o conteúdo para baixo em vez de ficar por cima do título. */
 .card__tag {
-  position: absolute; top: 28px; left: 34px;
+  align-self: flex-start;
+  margin-bottom: auto;
   padding: 7px 14px; border-radius: 999px;
   font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   background: rgba(255, 248, 240, .1); border: 1px solid var(--line-light);
@@ -416,6 +433,7 @@ em {
 .card--gp .card__tag { text-transform: none; letter-spacing: .04em; }
 .card--cel .card__tag { background: rgba(20, 17, 15, .06); border-color: var(--line); }
 .card h3 { font-size: clamp(24px, 2.6vw, 34px); letter-spacing: -.02em; margin-bottom: 12px; }
+.card__tag + h3 { margin-top: 28px; }
 .card--gp h3 { font-size: clamp(34px, 4.4vw, 56px); letter-spacing: -.035em; }
 .card p { opacity: .78; max-width: 520px; font-size: 16px; }
 .card__link {
@@ -423,7 +441,7 @@ em {
   font-weight: 700; text-decoration: none; font-size: 15px;
 }
 .card__link span { transition: transform .25s var(--ease); }
-.card__link:hover span, .watch:hover .card__link span { transform: translateX(5px); }
+@media (hover: hover) { .card__link:hover span, .watch:hover .card__link span { transform: translateX(5px); } }
 
 /* ---------- GENEROSIDADE ---------- */
 .give {
@@ -452,7 +470,10 @@ em {
   overflow: hidden;
   transition: transform .35s var(--ease), box-shadow .35s var(--ease);
 }
-.watch:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(20, 17, 15, .4); }
+@media (hover: hover) {
+  .watch:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(20, 17, 15, .4); }
+  .watch:hover .watch__play { transform: scale(1.08); }
+}
 .watch__screen {
   position: relative; aspect-ratio: 16 / 9;
   background:
@@ -473,7 +494,6 @@ em {
   transition: transform .35s var(--ease);
 }
 .watch__play svg { width: 30px; height: 30px; fill: var(--accent); margin-left: 4px; }
-.watch:hover .watch__play { transform: scale(1.08); }
 .watch__badge {
   position: absolute; top: 18px; right: 18px;
   padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
@@ -494,7 +514,7 @@ em {
   text-decoration: none;
   transition: transform .25s var(--ease), background .25s;
 }
-.store:hover { transform: translateY(-2px); background: var(--ink-2); }
+@media (hover: hover) { .store:hover { transform: translateY(-2px); background: var(--ink-2); } }
 .store svg { width: 26px; height: 26px; fill: currentColor; }
 .store span { display: flex; flex-direction: column; font-weight: 700; font-size: 17px; line-height: 1.15; }
 .store small { font-weight: 500; font-size: 11px; opacity: .7; }
@@ -538,12 +558,14 @@ em {
 .footer__tag { font-family: var(--serif); font-style: italic; font-size: 22px; color: rgba(255, 248, 240, .6); margin: 14px 0 0; }
 .footer__cols { display: flex; gap: clamp(40px, 7vw, 96px); flex-wrap: wrap; }
 .footer__cols div { display: flex; flex-direction: column; gap: 10px; }
-.footer h4 { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.footer h2 { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
 .footer__cols a, .footer__cols span { color: rgba(255, 248, 240, .75); text-decoration: none; font-size: 15px; }
 .footer__cols a:hover { color: #fff; }
 .footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 28px; font-size: 14px; color: rgba(255, 248, 240, .5); }
-.footer__bottom a { text-decoration: none; }
+.footer__bottom a { text-decoration: none; padding: 4px 0; }
 .footer__bottom a:hover { color: var(--cream); }
+/* Enquanto o rodapé ocupa a largura toda, reserva o canto do botão flutuante do WhatsApp */
+@media (max-width: 1340px) { .footer__bottom { padding-right: 72px; } }
 
 /* ---------- WhatsApp flutuante ---------- */
 .wa {
@@ -556,7 +578,7 @@ em {
   opacity: 0; visibility: hidden; transform: translateY(12px);
 }
 .wa.is-visible { opacity: 1; visibility: visible; transform: none; }
-.wa:hover { transform: scale(1.07); }
+@media (hover: hover) { .wa:hover { transform: scale(1.07); } }
 .wa svg { width: 30px; height: 30px; fill: currentColor; }
 
 /* ---------- Animações de entrada ---------- */
@@ -575,12 +597,18 @@ em {
   .nav__toggle { display: block; z-index: 2; }
   .nav__links {
     position: fixed; inset: 0;
-    flex-direction: column; justify-content: center; gap: 26px;
+    flex-direction: column; gap: 26px;
+    padding: 88px 24px;
+    overflow-y: auto; overscroll-behavior: contain;
     background: rgba(20, 17, 15, .97);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     opacity: 0; visibility: hidden;
     transition: opacity .35s, visibility .35s;
   }
+  /* Margens automáticas centralizam a lista sem cortar o topo quando ela não cabe (celular deitado) */
+  .nav__links > :first-child { margin-top: auto; }
+  .nav__links > :last-child { margin-bottom: auto; }
   .nav__links a:not(.btn) { font-size: 26px; font-weight: 600; color: var(--cream); }
   .nav__links.is-open { opacity: 1; visibility: visible; }
   .nav__cta { margin-top: 12px; }
@@ -590,6 +618,13 @@ em {
   .services__grid { grid-template-columns: 1fr; }
   .service__time { font-size: 88px; }
   .visit__map, .visit__map iframe, .map-consent { min-height: 340px; }
+}
+
+/* Celular deitado: menu mais compacto para caber na altura da tela */
+@media (max-width: 900px) and (max-height: 540px) {
+  .nav__links { gap: 12px; padding: 72px 24px 20px; }
+  .nav__links a:not(.btn) { font-size: 20px; }
+  .nav__cta { margin-top: 6px; }
 }
 
 @media (max-width: 600px) {
@@ -605,11 +640,16 @@ em {
   .bento { grid-template-columns: 1fr; }
   .card--gp, .card--city, .card--vol, .card--cel { grid-column: auto; min-height: 320px; }
   .card { padding: 26px; }
-  .card__tag { left: 26px; top: 22px; }
+  .card__tag + h3 { margin-top: 22px; }
+  .watch__screen::after { left: 20px; bottom: 12px; font-size: 32px; }
+  .watch__play { width: 64px; height: 64px; box-shadow: 0 0 0 9px rgba(255, 248, 240, .15); }
+  .watch__play svg { width: 24px; height: 24px; }
+  .watch__badge { top: 14px; right: 14px; }
   .step { grid-template-columns: 52px 1fr; gap: 14px; }
   .step__n { font-size: 32px; }
   .info__row { grid-template-columns: 1fr; gap: 4px; }
   .give__actions .btn, .visit__actions .btn { flex: 1 1 100%; }
+  .footer__bottom { flex-direction: column; align-items: flex-start; padding-right: 0; }
   .wa { right: 16px; bottom: 16px; width: 56px; height: 56px; }
 }
 

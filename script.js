@@ -17,25 +17,41 @@
   const hero = document.querySelector('.hero');
 
   /* ---------- Nav: fundo ao rolar + botão WhatsApp ---------- */
+  let waFrom = 400;
   const onScroll = () => {
     const y = window.scrollY;
     nav?.classList.toggle('is-scrolled', y > 40);
-    wa?.classList.toggle('is-visible', y > (hero ? hero.offsetHeight * 0.6 : 400));
+    wa?.classList.toggle('is-visible', y > waFrom);
   };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+  // Mede o hero só quando ele muda de tamanho (fontes carregando, giro da tela), com o layout
+  // já pronto: medir a cada scroll ou resize forçaria um reflow
+  if (hero && 'ResizeObserver' in window) {
+    new ResizeObserver(() => { waFrom = hero.offsetHeight * 0.6; onScroll(); }).observe(hero);
+  }
 
   /* ---------- Menu mobile ---------- */
+  // Com o menu aberto, o resto da página (e a logo, coberta pelo menu) sai do foco do teclado
+  const behindMenu = [...document.querySelectorAll('body > :not(.nav)'), document.querySelector('.nav .logo')].filter(Boolean);
+  const isOpen = () => toggle?.getAttribute('aria-expanded') === 'true';
   const setMenu = (open) => {
     if (!toggle || !menu) return;
     toggle.setAttribute('aria-expanded', String(open));
     toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
     menu.classList.toggle('is-open', open);
     document.body.style.overflow = open ? 'hidden' : '';
+    behindMenu.forEach((el) => { el.inert = open; });
   };
-  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  toggle?.addEventListener('click', () => setMenu(!isOpen()));
   menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !isOpen()) return;
+    setMenu(false);
+    toggle.focus();
+  });
+  // Girar o tablet/celular com o menu aberto (virando layout desktop) não pode deixar a página travada
+  window.matchMedia('(min-width: 901px)').addEventListener?.('change', (e) => { if (e.matches) setMenu(false); });
 
   /* ---------- Animações de entrada ---------- */
   const reveals = document.querySelectorAll('.reveal');
