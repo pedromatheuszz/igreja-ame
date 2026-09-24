@@ -1,0 +1,49 @@
+# ============================================================
+# Igreja Ame · Configuração de segurança para Apache (Hostinger, cPanel etc.)
+# ============================================================
+
+# Sem listagem de diretórios e sem assinatura do servidor
+Options -Indexes
+ServerSignature Off
+
+# Força HTTPS
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Bloqueia arquivos ocultos (.git, .env, .htaccess)
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+RedirectMatch 404 /\.git
+
+# Só aceita GET e HEAD (site estático)
+<LimitExcept GET HEAD>
+  Require all denied
+</LimitExcept>
+
+<IfModule mod_headers.c>
+  Header unset X-Powered-By
+  Header always set Content-Security-Policy "default-src 'none'; script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo='; style-src 'self'; font-src 'self'; img-src 'self' data:; frame-src https://www.google.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'; frame-ancestors 'none'"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+
+  <FilesMatch "\.(woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
+
+AddType font/woff2 .woff2
+AddDefaultCharset UTF-8

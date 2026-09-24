@@ -1,4 +1,15 @@
 (() => {
+  /* ---------- Anti-clickjacking (reforço para hospedagens sem cabeçalho frame-ancestors) ---------- */
+  if (window.top !== window.self) {
+    try {
+      window.top.location.replace(window.self.location.href);
+    } catch {
+      /* navegação do topo bloqueada: esconde o conteúdo para não servir de isca */
+    }
+    document.documentElement.style.display = 'none';
+    return;
+  }
+
   const nav = document.querySelector('.nav');
   const toggle = document.querySelector('.nav__toggle');
   const menu = document.getElementById('menu');
@@ -8,21 +19,22 @@
   /* ---------- Nav: fundo ao rolar + botão WhatsApp ---------- */
   const onScroll = () => {
     const y = window.scrollY;
-    nav.classList.toggle('is-scrolled', y > 40);
-    wa.classList.toggle('is-visible', y > hero.offsetHeight * 0.6);
+    nav?.classList.toggle('is-scrolled', y > 40);
+    wa?.classList.toggle('is-visible', y > (hero ? hero.offsetHeight * 0.6 : 400));
   };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
   /* ---------- Menu mobile ---------- */
   const setMenu = (open) => {
+    if (!toggle || !menu) return;
     toggle.setAttribute('aria-expanded', String(open));
     toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
     menu.classList.toggle('is-open', open);
     document.body.style.overflow = open ? 'hidden' : '';
   };
-  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
-  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
 
   /* ---------- Animações de entrada ---------- */
@@ -91,6 +103,7 @@
   const cards = document.querySelectorAll('.service');
 
   const updateNext = () => {
+    if (!whenEl || !countEl) return;
     const next = findNext();
     if (!next) return;
     whenEl.textContent = next.label;
@@ -103,6 +116,22 @@
   updateNext();
   setInterval(updateNext, 60 * 1000);
 
+  /* ---------- Mapa: só carrega o Google Maps após o clique (privacidade/LGPD) ---------- */
+  const MAP_SRC = 'https://www.google.com/maps?q=Rua+Benjamin+Constant,+3473+-+Gl%C3%B3ria,+Joinville+-+SC&output=embed';
+  const mapBox = document.getElementById('mapa');
+  document.getElementById('load-map')?.addEventListener('click', () => {
+    if (!mapBox) return;
+    const iframe = document.createElement('iframe');
+    iframe.title = 'Mapa: Igreja Ame, Joinville';
+    iframe.src = MAP_SRC;
+    iframe.loading = 'lazy';
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
+    iframe.allowFullscreen = true;
+    mapBox.replaceChildren(iframe);
+  });
+
   /* ---------- Ano no rodapé ---------- */
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 })();

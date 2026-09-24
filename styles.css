@@ -2,6 +2,29 @@
    Igreja Ame · Landing Page
    ========================================================= */
 
+/* Fontes hospedadas localmente (sem requisições ao Google Fonts) */
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("assets/fonts/plus-jakarta-sans-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("assets/fonts/fraunces-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("assets/fonts/fraunces-italic-latin.woff2") format("woff2");
+}
+
 :root {
   --ink: #14110F;
   --ink-2: #2A2521;
@@ -500,6 +523,18 @@ em {
   border: 1px solid var(--line); background: var(--sand-2);
 }
 .visit__map iframe { width: 100%; height: 100%; min-height: 440px; border: 0; filter: grayscale(.25) contrast(1.02); }
+.map-consent {
+  height: 100%; min-height: 440px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  padding: 32px; text-align: center;
+  background:
+    radial-gradient(60% 60% at 50% 40%, rgba(228, 87, 46, .12), transparent 70%),
+    var(--sand-2);
+}
+.map-consent svg { width: 44px; height: 44px; fill: var(--accent); }
+.map-consent p { max-width: 380px; margin: 0; font-size: 15px; color: var(--ink-2); }
+.map-consent__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; }
+.map-consent .card__link { color: var(--accent); }
 
 /* ---------- FOOTER ---------- */
 .footer { background: var(--ink); color: var(--cream); padding: 80px 0 32px; }
@@ -559,7 +594,7 @@ em {
   .first__grid > div:first-child { position: static; }
   .services__grid { grid-template-columns: 1fr; }
   .service__time { font-size: 88px; }
-  .visit__map, .visit__map iframe { min-height: 340px; }
+  .visit__map, .visit__map iframe, .map-consent { min-height: 340px; }
 }
 
 @media (max-width: 600px) {
