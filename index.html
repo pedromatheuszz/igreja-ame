@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Igreja Ame · Joinville/SC · Nós somos família</title>
+  <meta name="description" content="Igreja Ame em Joinville (SC). Mais do que uma igreja para frequentar, uma família para pertencer. Cultos às quartas 20h e aos domingos 10h e 19h.">
+  <meta name="theme-color" content="#14110F">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Igreja Ame · Nós somos família">
+  <meta property="og:description" content="Mais do que uma igreja para frequentar, uma família para pertencer. Quarta 20h · Domingo 10h e 19h · Joinville/SC.">
+  <meta property="og:locale" content="pt_BR">
+  <!-- <meta property="og:image" content="assets/og-image.jpg"> -->
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E4572E'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-style='italic' font-size='36' text-anchor='middle' fill='%23FFF8F0'%3Ea%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js')</script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Church",
+    "name": "Igreja Ame",
+    "slogan": "Nós somos família",
+    "foundingDate": "2016",
+    "telephone": "+55 47 99706-8202",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Rua Benjamin Constant, 3473 - Glória",
+      "addressLocality": "Joinville",
+      "addressRegion": "SC",
+      "postalCode": "89217-002",
+      "addressCountry": "BR"
+    },
+    "sameAs": [
+      "https://www.instagram.com/igrejaame/",
+      "https://www.youtube.com/@IgrejaAme",
+      "https://www.facebook.com/igrejaame/"
+    ],
+    "event": [
+      { "@type": "Event", "name": "Culto de Quarta", "eventSchedule": { "@type": "Schedule", "byDay": "https://schema.org/Wednesday", "startTime": "20:00", "repeatFrequency": "P1W" } },
+      { "@type": "Event", "name": "Celebração de Domingo (manhã)", "eventSchedule": { "@type": "Schedule", "byDay": "https://schema.org/Sunday", "startTime": "10:00", "repeatFrequency": "P1W" } },
+      { "@type": "Event", "name": "Celebração de Domingo (noite)", "eventSchedule": { "@type": "Schedule", "byDay": "https://schema.org/Sunday", "startTime": "19:00", "repeatFrequency": "P1W" } }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="topo">
+    <div class="container nav__inner">
+      <a href="#topo" class="logo" aria-label="Igreja Ame, início">
+        <span class="logo__mark">ame</span>
+        <span class="logo__sub">igreja</span>
+      </a>
+
+      <nav class="nav__links" id="menu" aria-label="Principal">
+        <a href="#sobre">Sobre</a>
+        <a href="#cultos">Cultos</a>
+        <a href="#comunidade">Comunidade</a>
+        <a href="#generosidade">Generosidade</a>
+        <a href="#online">Online</a>
+        <a href="#visite" class="btn btn--sm btn--accent nav__cta">Planeje sua visita</a>
+      </nav>
+
+      <button class="nav__toggle" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <!-- Para usar uma foto de fundo, salve em assets/hero.jpg e adicione a classe "hero--photo" à section acima. -->
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <p class="eyebrow reveal">Igreja Ame · Joinville/SC</p>
+        <h1 class="hero__title reveal">
+          Nós somos <em>família.</em>
+        </h1>
+        <p class="hero__lead reveal">
+          Mais do que uma igreja para frequentar, uma família para pertencer.
+          Venha como você está: tem um lugar à mesa esperando por você.
+        </p>
+        <div class="hero__actions reveal">
+          <a href="#visite" class="btn btn--accent btn--lg">Planeje sua visita</a>
+          <a href="https://www.youtube.com/@IgrejaAme" target="_blank" rel="noopener" class="btn btn--ghost btn--lg">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+            Assistir online
+          </a>
+        </div>
+
+        <div class="next reveal" aria-live="polite">
+          <span class="next__dot" aria-hidden="true"></span>
+          <span class="next__label">Próximo culto</span>
+          <strong class="next__when" id="next-when">Domingo · 10h</strong>
+          <span class="next__count" id="next-count"></span>
+        </div>
+      </div>
+
+      <div class="hero__marquee" aria-hidden="true">
+        <div class="marquee">
+          <span>Amar a Deus</span><i>✦</i><span>Amar pessoas</span><i>✦</i><span>Servir a cidade</span><i>✦</i><span>Nós somos família</span><i>✦</i>
+          <span>Amar a Deus</span><i>✦</i><span>Amar pessoas</span><i>✦</i><span>Servir a cidade</span><i>✦</i><span>Nós somos família</span><i>✦</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SOBRE ============ -->
+    <section class="section about" id="sobre">
+      <div class="container about__grid">
+        <div class="about__text">
+          <p class="eyebrow reveal">Quem somos</p>
+          <h2 class="section__title reveal">Ame não é sigla.<br><em>É um verbo.</em></h2>
+          <p class="reveal">
+            Nosso nome vem de <strong>amar</strong>, e é isso que queremos viver todos os dias:
+            amar a Deus, amar as pessoas e amar a nossa cidade. Desde 2016 somos uma comunidade
+            em Joinville onde ninguém precisa ser perfeito para chegar, só precisa estar disposto a
+            caminhar junto.
+          </p>
+          <p class="reveal">
+            Liderados pelos pastores <strong>Lenon Silva</strong> e <strong>Giu Santos</strong>,
+            acreditamos numa igreja que abre a porta, puxa a cadeira e chama pelo nome.
+          </p>
+        </div>
+
+        <div class="about__stats">
+          <div class="stat reveal">
+            <span class="stat__num">2016</span>
+            <span class="stat__label">o ano em que começamos a caminhar juntos</span>
+          </div>
+          <div class="stat reveal">
+            <span class="stat__num">33<small>mil+</small></span>
+            <span class="stat__label">pessoas nos acompanham nas redes</span>
+          </div>
+          <div class="stat reveal">
+            <span class="stat__num">3</span>
+            <span class="stat__label">encontros toda semana</span>
+          </div>
+          <blockquote class="about__quote reveal">
+            “Nisto todos conhecerão que sois meus discípulos, se vos amardes uns aos outros.”
+            <cite>João 13:35</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CULTOS ============ -->
+    <section class="section services" id="cultos">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow reveal">Nossos encontros</p>
+          <h2 class="section__title reveal">Toda semana tem <em>lugar pra você.</em></h2>
+        </div>
+
+        <div class="services__grid">
+          <article class="service reveal" data-day="3" data-hour="20">
+            <div class="service__day">Quarta</div>
+            <div class="service__time">20<span>h</span></div>
+            <h3>Culto de Quarta</h3>
+            <p>Uma pausa no meio da semana para renovar as forças, adorar e ouvir a Palavra.</p>
+          </article>
+          <article class="service service--featured reveal" data-day="0" data-hour="10">
+            <div class="service__day">Domingo</div>
+            <div class="service__time">10<span>h</span></div>
+            <h3>Celebração da Manhã</h3>
+            <p>Comece a semana em família. Um culto leve, cheio de vida, pra todas as idades.</p>
+          </article>
+          <article class="service reveal" data-day="0" data-hour="19">
+            <div class="service__day">Domingo</div>
+            <div class="service__time">19<span>h</span></div>
+            <h3>Celebração da Noite</h3>
+            <p>Adoração, Palavra e comunhão para fechar o domingo com o coração cheio.</p>
+          </article>
+        </div>
+
+        <p class="services__note reveal">
+          📍 Rua Benjamin Constant, 3473, Glória, Joinville/SC ·
+          <a href="#visite">Como chegar</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ PRIMEIRA VEZ ============ -->
+    <section class="section first" id="primeira-vez">
+      <div class="container first__grid">
+        <div>
+          <p class="eyebrow reveal">Primeira vez?</p>
+          <h2 class="section__title reveal">A gente já estava <em>te esperando.</em></h2>
+          <p class="reveal first__intro">
+            Chegar num lugar novo pode dar um frio na barriga. Por isso preparamos tudo
+            pra você se sentir em casa desde a chegada.
+          </p>
+          <a href="https://wa.me/5547997068202?text=Ol%C3%A1!%20Quero%20visitar%20a%20Igreja%20Ame%20pela%20primeira%20vez." target="_blank" rel="noopener" class="btn btn--dark reveal">Avise que você vem</a>
+        </div>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step__n">01</span>
+            <div>
+              <h3>Chegue alguns minutos antes</h3>
+              <p>Nossa equipe de recepção vai te receber na porta e te ajudar a encontrar um lugar.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">02</span>
+            <div>
+              <h3>Venha como você está</h3>
+              <p>Sem dress code, sem roteiro. Aqui o que importa é você estar presente.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">03</span>
+            <div>
+              <h3>Louvor, Palavra e comunhão</h3>
+              <p>Adoração, uma mensagem prática da Bíblia e um tempo pra conhecer gente nova.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__n">04</span>
+            <div>
+              <h3>Dê o próximo passo</h3>
+              <p>Quer se conectar mais? A gente te apresenta um GP perto da sua casa.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ COMUNIDADE ============ -->
+    <section class="section community" id="comunidade">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow reveal">Faça parte</p>
+          <h2 class="section__title reveal">Igreja é gente. <em>Encontre a sua turma.</em></h2>
+        </div>
+
+        <div class="bento">
+          <article class="card card--gp reveal">
+            <span class="card__tag">GPs</span>
+            <h3>Grupos Pequenos</h3>
+            <p>Durante a semana a igreja se espalha pelas casas de Joinville. É ali que as amizades nascem, a gente ora uns pelos outros e a fé vira vida real.</p>
+            <a href="https://wa.me/5547997068202?text=Ol%C3%A1!%20Quero%20participar%20de%20um%20GP." target="_blank" rel="noopener" class="card__link">Quero um GP <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card card--city reveal">
+            <span class="card__tag">Ame Cidade</span>
+            <h3>Amor que sai das quatro paredes</h3>
+            <p>Nossa frente de ação social, dedicada a cuidar de famílias e comunidades em situação de vulnerabilidade em Joinville.</p>
+            <a href="https://wa.me/5547997068202?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20Ame%20Cidade." target="_blank" rel="noopener" class="card__link">Quero ajudar <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card card--vol reveal">
+            <span class="card__tag">Voluntários</span>
+            <h3>Sirva com seus dons</h3>
+            <p>Recepção, louvor, mídia, produção e muito mais. Tem espaço pra cada talento.</p>
+            <a href="https://wa.me/5547997068202?text=Ol%C3%A1!%20Quero%20ser%20volunt%C3%A1rio%20na%20Igreja%20Ame." target="_blank" rel="noopener" class="card__link">Quero servir <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="card card--cel reveal">
+            <span class="card__tag">Celebrações</span>
+            <h3>Momentos que marcam</h3>
+            <p>Batismos, apresentações e conferências: a gente celebra junto cada passo da caminhada.</p>
+            <a href="https://www.instagram.com/igrejaame/" target="_blank" rel="noopener" class="card__link">Ver agenda <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GENEROSIDADE ============ -->
+    <section class="section give" id="generosidade">
+      <div class="container give__inner">
+        <div class="give__text">
+          <p class="eyebrow eyebrow--light reveal">Generosidade</p>
+          <h2 class="section__title reveal">Quando a gente semeia junto, <em>a cidade inteira colhe.</em></h2>
+          <p class="reveal">
+            Cada oferta sustenta os cultos, os GPs e o cuidado com as famílias alcançadas pelo
+            Ame Cidade. Contribua de forma simples e segura pelo nosso aplicativo.
+          </p>
+          <div class="give__actions reveal">
+            <a href="https://apps.apple.com/br/app/igreja-ame/id6793222838" target="_blank" rel="noopener" class="btn btn--light">Contribuir pelo app</a>
+            <a href="https://wa.me/5547997068202?text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20para%20contribuir." target="_blank" rel="noopener" class="btn btn--outline-light">Outras formas</a>
+          </div>
+        </div>
+        <p class="give__verse reveal">
+          “Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação,
+          pois Deus ama quem dá com alegria.”
+          <cite>2 Coríntios 9:7</cite>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ ONLINE + APP ============ -->
+    <section class="section online" id="online">
+      <div class="container online__grid">
+        <a class="watch reveal" href="https://www.youtube.com/@IgrejaAme" target="_blank" rel="noopener">
+          <div class="watch__screen">
+            <span class="watch__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg>
+            </span>
+            <span class="watch__badge">YouTube</span>
+          </div>
+          <div class="watch__body">
+            <h3>Mensagens no YouTube</h3>
+            <p>Perdeu o culto ou quer rever aquela palavra? Todas as mensagens estão no nosso canal.</p>
+            <span class="card__link">Acessar canal <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+
+        <div class="app reveal">
+          <p class="eyebrow">Aplicativo Ame</p>
+          <h2 class="section__title">A igreja <em>no seu bolso.</em></h2>
+          <p>Agenda, GPs, contribuições e novidades da Ame na palma da mão.</p>
+          <div class="stores">
+            <a href="https://apps.apple.com/br/app/igreja-ame/id6793222838" target="_blank" rel="noopener" class="store">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.73-1.35-.14-2.64.8-3.33.8-.69 0-1.74-.78-2.87-.76-1.47.02-2.83.86-3.59 2.18-1.53 2.66-.39 6.6 1.1 8.76.73 1.06 1.6 2.24 2.73 2.2 1.1-.05 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.08 2.65-2.14.84-1.22 1.18-2.41 1.2-2.47-.03-.01-2.3-.88-2.32-3.5zM14.2 6.13c.6-.73 1.01-1.74.9-2.75-.87.04-1.92.58-2.54 1.3-.56.64-1.05 1.67-.92 2.66.97.08 1.96-.49 2.56-1.21z"/></svg>
+              <span><small>Baixar na</small>App Store</span>
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=org.igrejaame.appEK671" target="_blank" rel="noopener" class="store">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3c-.2.2-.3.6-.3 1v17.4c0 .4.1.8.3 1l.1.1 9.7-9.7v-.2L3.7 2.2l-.1.1zm13 12.9-3.2-3.2v-.2l3.2-3.2.1.1 3.8 2.2c1.1.6 1.1 1.6 0 2.2l-3.8 2.2-.1-.1zm-.1.1L13.2 12l-9.6 9.7c.4.4.9.4 1.6.1l11.3-6.5m0-12.6L5.2 2.2c-.7-.4-1.2-.3-1.6.1l9.6 9.7 3.3-3.3z"/></svg>
+              <span><small>Disponível no</small>Google Play</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VISITE ============ -->
+    <section class="section visit" id="visite">
+      <div class="container visit__grid">
+        <div class="visit__info">
+          <p class="eyebrow reveal">Planeje sua visita</p>
+          <h2 class="section__title reveal">Vem pra casa. <em>A porta tá aberta.</em></h2>
+
+          <dl class="info">
+            <div class="info__row reveal">
+              <dt>Endereço</dt>
+              <dd>Rua Benjamin Constant, 3473<br>Glória · Joinville/SC · 89217-002</dd>
+            </div>
+            <div class="info__row reveal">
+              <dt>Cultos</dt>
+              <dd>Quarta às 20h<br>Domingo às 10h e 19h</dd>
+            </div>
+            <div class="info__row reveal">
+              <dt>Secretaria</dt>
+              <dd><a href="https://wa.me/5547997068202" target="_blank" rel="noopener">(47) 99706-8202</a> · WhatsApp</dd>
+            </div>
+          </dl>
+
+          <div class="visit__actions reveal">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Igreja+Ame+Rua+Benjamin+Constant+3473+Joinville+SC" target="_blank" rel="noopener" class="btn btn--accent">Traçar rota</a>
+            <a href="https://wa.me/5547997068202" target="_blank" rel="noopener" class="btn btn--dark">Falar com a secretaria</a>
+          </div>
+        </div>
+
+        <div class="visit__map reveal">
+          <iframe
+            title="Mapa: Igreja Ame, Joinville"
+            src="https://www.google.com/maps?q=Rua+Benjamin+Constant,+3473+-+Gl%C3%B3ria,+Joinville+-+SC&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div>
+          <a href="#topo" class="logo logo--light" aria-label="Igreja Ame, voltar ao topo">
+            <span class="logo__mark">ame</span>
+            <span class="logo__sub">igreja</span>
+          </a>
+          <p class="footer__tag">Nós somos família.</p>
+        </div>
+
+        <div class="footer__cols">
+          <div>
+            <h4>Navegue</h4>
+            <a href="#sobre">Sobre</a>
+            <a href="#cultos">Cultos</a>
+            <a href="#comunidade">Comunidade</a>
+            <a href="#generosidade">Generosidade</a>
+          </div>
+          <div>
+            <h4>Encontros</h4>
+            <span>Quarta · 20h</span>
+            <span>Domingo · 10h</span>
+            <span>Domingo · 19h</span>
+          </div>
+          <div>
+            <h4>Siga</h4>
+            <a href="https://www.instagram.com/igrejaame/" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.youtube.com/@IgrejaAme" target="_blank" rel="noopener">YouTube</a>
+            <a href="https://www.facebook.com/igrejaame/" target="_blank" rel="noopener">Facebook</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>© <span id="year">2026</span> Igreja Ame · Joinville/SC</span>
+        <a href="#topo">Voltar ao topo ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flutuante -->
+  <a class="wa" href="https://wa.me/5547997068202" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.91-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.31l-.34-.2-3.57.93.95-3.48-.22-.36A9.4 9.4 0 0 1 2.6 12a9.44 9.44 0 0 1 16.12-6.68A9.38 9.38 0 0 1 21.5 12a9.45 9.45 0 0 1-9.45 9.5M20.1 3.9A11.3 11.3 0 0 0 12.05.6 11.4 11.4 0 0 0 2.17 17.66L.6 23.4l5.87-1.54a11.36 11.36 0 0 0 5.58 1.42A11.4 11.4 0 0 0 23.4 12a11.3 11.3 0 0 0-3.3-8.1"/></svg>
+  </a>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
